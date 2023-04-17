@@ -13,11 +13,12 @@ export class ProductsService {
     @InjectRepository(Product) private productRepo: Repository<Product>,
   ) {}
 
-  getProducts(id?: string) {
-    if (id) {
-      return this.productRepo.find({ where: { id } });
-    }
+  getProducts() {
     return this.productRepo.find();
+  }
+
+  findProduct(id: string) {
+    return this.productRepo.findOne({ where: { id } });
   }
 
   async createProduct(body: {
@@ -39,7 +40,7 @@ export class ProductsService {
   }
 
   async updateProduct(id: string, body: Partial<Product>) {
-    const existingProduct = await this.getProducts(id);
+    const existingProduct = await this.findProduct(id);
     if (!existingProduct)
       throw new NotFoundException('Product ID: ' + id + ' not found!');
     Object.assign(existingProduct, body);
@@ -47,7 +48,7 @@ export class ProductsService {
   }
 
   async deleteProduct(id: string) {
-    const productToDelete = await this.getProducts(id);
+    const productToDelete = await this.findProduct(id);
     if (!productToDelete)
       throw new NotFoundException('Product ID: ' + id + ' not found!');
     return this.productRepo.remove(productToDelete);

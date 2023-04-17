@@ -25,6 +25,11 @@ export class ProductsController {
     return this.productsService.getProducts();
   }
 
+  @Get('/:id')
+  getProduct(@Param('id', ParseUUIDPipe) id: string) {
+    return this.productsService.findProduct(id);
+  }
+
   @Post()
   createProduct(@Body() createProductDto: CreateProductDto) {
     return this.productsService.createProduct(createProductDto);
