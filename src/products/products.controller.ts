@@ -9,9 +9,11 @@ import {
   Param,
   BadRequestException,
   ParseUUIDPipe,
+  Put,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from 'src/dtos/create-product.dto';
+import { UpdateProductDto } from 'src/dtos/update-product.dto';
 
 @UsePipes(ValidationPipe)
 @Controller('products')
@@ -28,9 +30,16 @@ export class ProductsController {
     return this.productsService.createProduct(createProductDto);
   }
 
+  @Put('/:id')
+  updateProduct(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    return this.productsService.updateProduct(id, updateProductDto);
+  }
+
   @Delete('/:id')
   deleteProduct(@Param('id', ParseUUIDPipe) id: string) {
-    if (!id) throw new BadRequestException('Missing ID parameter.');
     return this.productsService.deleteProduct(id);
   }
 }
