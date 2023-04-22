@@ -15,7 +15,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from 'src/dtos/create-product.dto';
 import { UpdateProductDto } from 'src/dtos/update-product.dto';
 
-@UsePipes(ValidationPipe)
+@UsePipes(new ValidationPipe({ whitelist: true }))
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
