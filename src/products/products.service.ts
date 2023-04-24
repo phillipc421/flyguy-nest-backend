@@ -21,6 +21,13 @@ export class ProductsService {
     return this.productRepo.findOne({ where: { id } });
   }
 
+  async getMultipleProducts(ids: string[]) {
+    return this.productRepo
+      .createQueryBuilder('product')
+      .where('product.id IN (:...ids)', { ids })
+      .getMany();
+  }
+
   async createProduct(body: {
     name: string;
     description: string;

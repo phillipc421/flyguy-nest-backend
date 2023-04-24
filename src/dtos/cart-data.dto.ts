@@ -6,6 +6,7 @@ import {
   ValidateNested,
   IsDefined,
   IsNotEmptyObject,
+  IsArray,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -18,9 +19,9 @@ export class CartItemDto {
 }
 
 export class CartDataDto {
-  @IsNotEmptyObject()
+  @IsArray()
   @IsDefined()
   @Type(() => CartItemDto)
-  @ValidateNested({ each: true })
+  @ValidateNested()
   items: CartItemDto[];
 }

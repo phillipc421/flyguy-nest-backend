@@ -15,6 +15,7 @@ export class StripeController {
 
   @Post()
   createPaymentIntent(@Body() body: CartDataDto) {
+    console.log(body);
     return this.stripeService.createPaymentIntent(body);
   }
 }
