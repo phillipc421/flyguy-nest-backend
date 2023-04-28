@@ -31,6 +31,7 @@ export class StripeService {
       );
     // calculate total cart amount
     let total = 0;
+    
 
     return products;
   }

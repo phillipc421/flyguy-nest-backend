@@ -47,6 +47,7 @@ export class ProductsService {
   }
 
   async updateProduct(id: string, body: Partial<Product>) {
+    console.log(id, body)
     const existingProduct = await this.findProduct(id);
     if (!existingProduct)
       throw new NotFoundException('Product ID: ' + id + ' not found!');
