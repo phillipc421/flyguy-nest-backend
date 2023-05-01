@@ -23,6 +23,12 @@ export class Product {
   @Column()
   description: string;
 
+  @Column({ name: 'long_description', nullable: true })
+  longDescription: string;
+
+  @Column({ nullable: true })
+  ingredients: string;
+
   @Column({ nullable: true })
   image: string;
 

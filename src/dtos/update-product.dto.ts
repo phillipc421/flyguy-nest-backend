@@ -24,6 +24,16 @@ export class UpdateProductDto {
   price: number;
 
   @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  longDescription: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  ingredients: string;
+
+  @IsOptional()
   @IsUrl()
   @IsNotEmpty()
   image: string;
