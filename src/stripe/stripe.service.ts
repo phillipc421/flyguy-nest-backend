@@ -1,5 +1,4 @@
 import Stripe from 'stripe';
-import { StripeModule } from './stripe.module';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
@@ -25,27 +24,32 @@ export class StripeService {
     const cartItems = body.items;
     const cartIds = Object.values(cartItems).map((item) => item.id);
     const products = await this.productsService.getMultipleProducts(cartIds);
+    const idPriceMap = {};
+    products.forEach((product) => (idPriceMap[product.id] = product.price));
+
     if (!products)
       throw new NotFoundException(
         'No products founds for the given identifiers.',
       );
     // calculate total cart amount
-    let total = 0;
-    
-
-    return products;
+    // stripe wants smallest currency unit, ie cents, hence the * 100
+    return (
+      cartItems.reduce(
+        (prev, curr) => prev + idPriceMap[curr.id] * curr.qty,
+        0,
+      ) * 100
+    );
   }
 
   async createPaymentIntent(body: CartDataInterface) {
     const calc = await this.calculateAmount(body);
-    console.log('CALC', calc);
     const paymentIntent = await this.stripe.paymentIntents.create({
-      amount: 2000,
+      amount: calc,
       currency: 'usd',
       automatic_payment_methods: {
         enabled: true,
       },
     });
-    return paymentIntent.client_secret;
+    return { stripeClientSecret: paymentIntent.client_secret };
   }
 }
