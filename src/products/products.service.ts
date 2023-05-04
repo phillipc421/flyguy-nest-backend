@@ -21,6 +21,13 @@ export class ProductsService {
     return this.productRepo.findOne({ where: { id } });
   }
 
+  async getMultipleProducts(ids: string[]) {
+    return this.productRepo
+      .createQueryBuilder('product')
+      .where('product.id IN (:...ids)', { ids })
+      .getMany();
+  }
+
   async createProduct(body: {
     name: string;
     description: string;
@@ -40,6 +47,7 @@ export class ProductsService {
   }
 
   async updateProduct(id: string, body: Partial<Product>) {
+    console.log(id, body)
     const existingProduct = await this.findProduct(id);
     if (!existingProduct)
       throw new NotFoundException('Product ID: ' + id + ' not found!');
