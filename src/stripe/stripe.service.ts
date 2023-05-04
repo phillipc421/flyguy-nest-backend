@@ -43,7 +43,10 @@ export class StripeService {
 
   async createPaymentIntent(body: CartDataInterface) {
     const calc = await this.calculateAmount(body);
+    const customer = await this.stripe.customers.create();
     const paymentIntent = await this.stripe.paymentIntents.create({
+      customer: customer.id,
+      setup_future_usage: 'off_session',
       amount: calc,
       currency: 'usd',
       automatic_payment_methods: {

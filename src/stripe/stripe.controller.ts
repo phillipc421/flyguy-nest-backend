@@ -17,4 +17,10 @@ export class StripeController {
   createPaymentIntent(@Body() body: CartDataDto) {
     return this.stripeService.createPaymentIntent(body);
   }
+
+  @Post('/webhook')
+  readEvent(@Body() body: any) {
+    console.log(body);
+    return 'hi';
+  }
 }
